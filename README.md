@@ -59,7 +59,7 @@ This project is a YouTube Data Analytics Platform built using Python, Kafka, Had
 
 1.  Clone the repository:
 
-    git clone https://github.com/your-username/YouTube-Data-Analytics.git
+    git clone https://github.com/ayush6645/Automated-YouTube-Analytics-Platform
 
 3.  Install dependencies:
 
