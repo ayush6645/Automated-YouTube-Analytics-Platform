@@ -1,0 +1,960 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="" />
+  <link rel="stylesheet" as="style" onload="this.rel='stylesheet'"
+    href="https://fonts.googleapis.com/css2?display=swap&amp;family=Noto+Sans%3Awght%40400%3B500%3B700%3B900&amp;family=Plus+Jakarta+Sans%3Awght%40400%3B500%3B700%3B800" />
+
+  <title>Galileo Design</title>
+  <link rel="icon" type="image/x-icon" href="data:image/x-icon;base64," />
+
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+</head>
+
+<body>
+  <div class="relative flex size-full min-h-screen flex-col bg-[#181111] dark group/design-root overflow-x-hidden"
+    style='font-family: "Plus Jakarta Sans", "Noto Sans", sans-serif;'>
+    <div class="layout-container flex h-full grow flex-col">
+      <header
+        class="flex items-center justify-between whitespace-nowrap border-b border-solid border-b-[#382929] px-10 py-3">
+        <div class="flex items-center gap-8">
+          <div class="flex items-center gap-4 text-white">
+            <div class="size-4">
+              <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" clip-rule="evenodd"
+                  d="M39.475 21.6262C40.358 21.4363 40.6863 21.5589 40.7581 21.5934C40.7876 21.655 40.8547 21.857 40.8082 22.3336C40.7408 23.0255 40.4502 24.0046 39.8572 25.2301C38.6799 27.6631 36.5085 30.6631 33.5858 33.5858C30.6631 36.5085 27.6632 38.6799 25.2301 39.8572C24.0046 40.4502 23.0255 40.7407 22.3336 40.8082C21.8571 40.8547 21.6551 40.7875 21.5934 40.7581C21.5589 40.6863 21.4363 40.358 21.6262 39.475C21.8562 38.4054 22.4689 36.9657 23.5038 35.2817C24.7575 33.2417 26.5497 30.9744 28.7621 28.762C30.9744 26.5497 33.2417 24.7574 35.2817 23.5037C36.9657 22.4689 38.4054 21.8562 39.475 21.6262ZM4.41189 29.2403L18.7597 43.5881C19.8813 44.7097 21.4027 44.9179 22.7217 44.7893C24.0585 44.659 25.5148 44.1631 26.9723 43.4579C29.9052 42.0387 33.2618 39.5667 36.4142 36.4142C39.5667 33.2618 42.0387 29.9052 43.4579 26.9723C44.1631 25.5148 44.659 24.0585 44.7893 22.7217C44.9179 21.4027 44.7097 19.8813 43.5881 18.7597L29.2403 4.41187C27.8527 3.02428 25.8765 3.02573 24.2861 3.36776C22.6081 3.72863 20.7334 4.58419 18.8396 5.74801C16.4978 7.18716 13.9881 9.18353 11.5858 11.5858C9.18354 13.988 7.18717 16.4978 5.74802 18.8396C4.58421 20.7334 3.72865 22.6081 3.36778 24.2861C3.02574 25.8765 3.02429 27.8527 4.41189 29.2403Z"
+                  fill="currentColor"></path>
+              </svg>
+            </div>
+            <p id="channel-name" class="text-white text-4xl font-black">Loading...</p>
+          </div>
+        </div>
+        <div class="flex flex-1 justify-end gap-8">
+          <div class="flex items-center gap-9">
+            <a class="text-white text-sm font-medium leading-normal" href="index.html">Home</a>
+          </div>
+          <div class="flex gap-2">
+            <button
+            class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-10 px-4 bg-[#cd1818] text-white text-sm font-bold leading-normal tracking-[0.015em]"
+            onclick="visitChannel()">
+            <span class="truncate">Visit Channel</span>&nbsp;&nbsp;&nbsp;
+        </button>
+ 
+ <!-- Automate Data Collection Button -->
+<button 
+id="toggle-button" 
+class="flex items-center justify-center h-10 px-6 bg-[#cd1818] hover:bg-[#e52222] rounded-xl text-white text-sm font-bold leading-normal tracking-[0.015em] transition"
+onclick="toggleAutomationForm()">
+Automate Data Collection
+</button>&nbsp;&nbsp;&nbsp;
+</div>
+
+<!-- Overlay (for background dimming) -->
+<div id="overlay" 
+class="fixed inset-0 bg-black bg-opacity-50 hidden transition-opacity"
+onclick="toggleAutomationForm()">
+</div>
+
+<!-- Pop-Up Automation Form -->
+<div id="automation-container" 
+class="fixed top-1/2 left-1/2 w-full max-w-xl bg-[#382929] p-6 rounded-xl text-white opacity-0 scale-95 transition-all duration-300 ease-in-out z-50"
+style="transform: translate(-50%, -50%); display: none;">
+
+<!-- Close Button -->
+<button onclick="toggleAutomationForm()" 
+class="absolute top-3 right-3 text-gray-400 hover:text-gray-200">
+✕
+</button>
+
+<h2 class="text-2xl font-bold mb-4">Automated Data Collection</h2>
+
+<form id="automation-form" onsubmit="startAutomation(event)">
+<!-- Channel ID -->
+<div class="mb-4">
+  <label for="channel-id" class="block text-sm font-medium mb-2">YouTube Channel ID:</label>
+  <input 
+    type="text" 
+    id="channel-id" 
+    class="w-full bg-[#181111] border border-[#382929] rounded-xl p-3 text-white focus:outline-none" 
+    required 
+  />
+</div>
+
+<!-- Start Date -->
+<div class="mb-4">
+  <label for="start-date" class="block text-sm font-medium mb-2">Start Date:</label>
+  <input 
+    type="date" 
+    id="start-date" 
+    class="w-full bg-[#181111] border border-[#382929] rounded-xl p-3 text-white focus:outline-none" 
+    required 
+  />
+</div>
+
+<!-- End Date -->
+<div class="mb-4">
+  <label for="end-date" class="block text-sm font-medium mb-2">End Date:</label>
+  <input 
+    type="date" 
+    id="end-date" 
+    class="w-full bg-[#181111] border border-[#382929] rounded-xl p-3 text-white focus:outline-none" 
+    required 
+  />
+</div>
+
+<!-- Interval (Fixed at 15 min) -->
+<div class="mb-4">
+  <label class="block text-sm font-medium mb-2">Collection Interval:</label>
+  <input 
+    type="text" 
+    value="15 minutes" 
+    class="w-full bg-[#181111] border border-[#382929] rounded-xl p-3 text-gray-400 focus:outline-none" 
+    readonly 
+  />
+</div>
+
+<!-- Submit Button -->
+<button 
+  type="submit" 
+  class="bg-[#cd1818] hover:bg-[#e52222] rounded-xl px-6 py-3 text-white font-bold transition"
+>
+  Start Automation
+</button>
+</form>
+</div>
+
+<script>
+  function toggleAutomationForm() {
+    const overlay = document.getElementById('overlay');
+    const container = document.getElementById('automation-container');
+  
+    if (container.style.display === 'none') {
+      // Show pop-up
+      container.style.display = 'block';
+      overlay.classList.remove('hidden');
+      setTimeout(() => {
+        container.style.opacity = '1';
+        container.style.transform = 'translate(-50%, -50%) scale(1)';
+        overlay.style.opacity = '1';
+      }, 10);
+    } else {
+      // Hide pop-up
+      container.style.opacity = '0';
+      container.style.transform = 'translate(-50%, -50%) scale(0.95)';
+      overlay.style.opacity = '0';
+      setTimeout(() => {
+        container.style.display = 'none';
+        overlay.classList.add('hidden');
+      }, 300);
+    }
+  }
+  async function startAutomation(event) {
+    event.preventDefault();
+
+    const channelId = document.getElementById('channel-id').value.trim();
+    const startDate = new Date().toISOString().slice(0, 19).replace('T', ' '); // Current time as start_date
+    const endDate = new Date(document.getElementById('end-date').value)
+        .toISOString()
+        .slice(0, 19)
+        .replace('T', ' ');
+
+    if (!channelId) {
+        alert('Please enter a YouTube Channel ID.');
+        return;
+    }
+
+    if (!endDate) {
+        alert('Please enter an end date.');
+        return;
+    }
+
+    try {
+        const response = await fetch('http://127.0.0.1:5000/start-automation', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ 
+                channel_id: channelId,
+                start_date: startDate,
+                end_date: endDate 
+            })
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            alert(`✅ Automation started for channel: ${data.channel_id} until ${data.end_date}`);
+            toggleAutomationForm(); 
+        } else {
+            const error = await response.json();
+            alert(`❌ Error: ${error.detail}`);
+        }
+    } catch (error) {
+        alert('❌ Failed to start automation. Please check the console for more details.');
+        console.error(error);
+    }
+}
+
+  </script>
+  
+  <script>
+  async function fetchChannelData() {
+    const channelId = new URLSearchParams(window.location.search).get("channel_id");
+    if (!channelId) return;
+  
+    try {
+      const response = await fetch(`http://127.0.0.1:5000/fetch_channel_data`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ channel_id: channelId })
+      });
+  
+      if (response.ok) {
+        const data = await response.json();
+        console.log("Channel Data:", data);
+        document.getElementById('channel-name').innerText = data.channel_name || "Unknown";
+        document.getElementById('total-uploads').innerText = data.total_uploads || 0;
+        document.getElementById('total-likes').innerText = data.total_likes || 0;
+        document.getElementById('total-views').innerText = data.total_views || 0;
+        document.getElementById('total-subscribers').innerText = data.total_subscribers || 0;
+      } else {
+        console.error("Failed to fetch channel data:", response.statusText);
+      }
+    } catch (error) {
+      console.error("Error fetching channel data:", error);
+    }
+  }
+  
+  async function loadAnalytics() {
+    const channelId = new URLSearchParams(window.location.search).get("channel_id");
+    if (!channelId) return;
+  
+    // ✅ Fetch Uploads Per Month
+    try {
+      const response = await fetch(`http://127.0.0.1:5000/get_uploads_per_month?channel_id=${channelId}`);
+      if (response.ok) {
+        const data = await response.json();
+        console.log("Uploads Per Month:", data);
+      } else {
+        console.error("Failed to fetch uploads per month:", response.statusText);
+      }
+    } catch (error) {
+      console.error("Error fetching uploads per month:", error);
+    }
+  
+    // ✅ Fetch Video Durations
+    try {
+      const response = await fetch(`http://127.0.0.1:5000/api/video_durations?channel_id=${channelId}&timeframe=month`);
+      if (response.ok) {
+        const data = await response.json();
+        console.log("Video Durations:", data);
+      } else {
+        console.error("Failed to fetch video durations:", response.statusText);
+      }
+    } catch (error) {
+      console.error("Error fetching video durations:", error);
+    }
+  
+    // ✅ Fetch Top Videos
+    try {
+      const response = await fetch(`http://127.0.0.1:5000/get_top_videos?channel_id=${channelId}`);
+      if (response.ok) {
+        const data = await response.json();
+        console.log("Top Videos:", data);
+      } else {
+        console.error("Failed to fetch top videos:", response.statusText);
+      }
+    } catch (error) {
+      console.error("Error fetching top videos:", error);
+    }
+  
+    // ✅ Fetch Subscriber Growth
+    try {
+      const response = await fetch(`http://127.0.0.1:5000/get_subscriber_growth?channel_id=${channelId}`);
+      if (response.ok) {
+        const data = await response.json();
+        console.log("Subscriber Growth:", data);
+      } else {
+        console.error("Failed to fetch subscriber growth:", response.statusText);
+      }
+    } catch (error) {
+      console.error("Error fetching subscriber growth:", error);
+    }
+  }
+  
+  async function analyzeComments() {
+    const channelId = new URLSearchParams(window.location.search).get("channel_id");
+    if (!channelId) return;
+  
+    try {
+      const response = await fetch(`http://127.0.0.1:5000/analyze`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ channel_id: channelId })
+      });
+  
+      if (response.ok) {
+        const data = await response.json();
+        console.log("Sentiment Analysis:", data);
+        alert(`Positive: ${data.positive}%, Negative: ${data.negative}%, Neutral: ${data.neutral}%`);
+      } else {
+        const error = await response.json();
+        alert(`❌ Error: ${error.detail}`);
+      }
+    } catch (error) {
+      console.error("Error analyzing comments:", error);
+    }
+  }
+  
+  // ✅ Load Channel Data & Analytics on Page Load
+  document.addEventListener("DOMContentLoaded", () => {
+    fetchChannelData();
+    loadAnalytics();
+  });
+  </script>
+  
+         </button>
+          </div>
+          <div id="channel-profile" class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10"
+            style='background-image: url("https://cdn.usegalileo.ai/sdxl10/0c76f4e0-19f2-4c91-9122-46a138f1cf0b.png");'>
+          </div>
+      </header>
+      <div class="grid grid-cols-3 gap-4 mt-6">
+        <div class="card bg-gray-800 p-4 rounded-lg shadow">
+          <h3 class="text-gray-400">Subscribers</h3>
+          <p id="channel-subscribers" class="text-xl font-bold text-white">Loading...</p>
+        </div>
+        <div class="card bg-gray-800 p-4 rounded-lg shadow">
+          <h3 class="text-gray-400">Total Videos</h3>
+          <p id="channel-total-videos" class="text-xl font-bold text-white">Loading...</p>
+        </div>
+        <div class="card bg-gray-800 p-4 rounded-lg shadow">
+          <h3 class="text-gray-400">Total Views</h3>
+          <p id="channel-total-views" class="text-xl font-bold text-white">Loading...</p>
+        </div>
+      </div>
+
+      <!-- Channel About Section -->
+      <div class="mt-6 bg-gray-900 p-6 rounded-lg shadow">
+        <h3 class="text-gray-400 text-lg">About This Channel</h3>
+        <p id="channel-about" class="text-white mt-2">Loading...</p>
+      </div>
+
+    </div>
+    <h2 class="text-white text-[22px] font-bold leading-tight tracking-[-0.015em] px-4 pb-3 pt-5">Subscriber Growth Over
+      Time</h2>
+    <div class="flex min-h-[180px] flex-1 flex-col gap-8 py-4">
+      <canvas id="subscriberChart"></canvas>
+    </div>
+    <h2 class="text-white text-[22px] font-bold leading-tight tracking-[-0.015em] px-4 pb-3 pt-5">Subscriber Breakdown
+    </h2>
+    <div class="flex flex-wrap gap-4 px-4 py-6">
+      <div class="flex min-w-72 w-full flex-col gap-2 rounded-xl border border-[#533c3c] p-6 h-auto">
+        <p class="text-white text-base font-medium leading-normal">Subscriber Breakdown</p>
+        <div class="grid grid-cols-2 gap-6 px-3 w-full h-auto">
+          <!-- Graph 1 -->
+          <div class="flex flex-col items-center w-full">
+            <div class="border-[#b89d9d] bg-[#382929] border-t-2 w-full min-h-[100px] h-auto">
+              <canvas id="uploadsPerMonthChart"></canvas>
+            </div>
+            <p class="text-[#b89d9d] text-[13px] font-bold leading-normal tracking-[0.015em] mt-2">Video Uploads Per
+              Month</p>
+            <canvas id="uploadsChart"></canvas>
+            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+            <script>
+              // ✅ Declare channelId only once at the top level
+              const channelId = new URLSearchParams(window.location.search).get("channel_id");
+          
+              if (channelId) {
+                  fetchTopVideos(channelId); // Fetch top videos
+                  fetchUploadsPerMonth(channelId); // Fetch uploads per month
+              } else {
+                  console.error("Channel ID is missing in the URL.");
+              }
+          
+              // ✅ Function to fetch and display top videos by views
+              async function fetchTopVideos(channelId) {
+                  try {
+                      console.log(`Fetching top videos for channel: ${channelId}`);
+                      const response = await fetch(`http://127.0.0.1:5000/get_top_videos?channel_id=${channelId}`);
+                      if (!response.ok) {
+                          throw new Error(`HTTP error! Status: ${response.status}`);
+                      }
+          
+                      const videoData = await response.json();
+                      console.log("Received Data:", videoData);
+          
+                      if (!Array.isArray(videoData) || videoData.length === 0) {
+                          console.error("Invalid or empty top videos response:", videoData);
+                          return;
+                      }
+          
+                      // Extract data for chart
+                      const videoTitles = videoData.map(video => video.title);
+                      const videoViews = videoData.map(video => video.views);
+          
+                      // Get canvas context
+                      const canvas = document.getElementById("topVideosChart");
+                      if (!canvas) {
+                          console.error("Canvas element with ID 'topVideosChart' is missing.");
+                          return;
+                      }
+                      const ctx = canvas.getContext("2d");
+          
+                      // Destroy previous chart instance if it exists
+                      if (window.topVideosChart instanceof Chart) {
+                          window.topVideosChart.destroy();
+                      }
+          
+                      // Create chart
+                      window.topVideosChart = new Chart(ctx, {
+                          type: "bar",
+                          data: {
+                              labels: videoTitles,
+                              datasets: [{
+                                  label: "Views",
+                                  data: videoViews,
+                                  backgroundColor: ["#4c9aff", "#ff6384", "#ffcd56", "#36a2eb", "#ff9f40"],
+                                  borderColor: ["#2677ff", "#e53935", "#ffab00", "#1e88e5", "#ff6f00"],
+                                  borderWidth: 2,
+                                  hoverBackgroundColor: ["#1e63ff", "#c62828", "#ff9100", "#1565c0", "#ff5722"],
+                              }]
+                          },
+                          options: {
+                              responsive: true,
+                              maintainAspectRatio: false,
+                              scales: {
+                                  y: {
+                                      beginAtZero: true,
+                                      ticks: {
+                                          color: "#ffffff",
+                                          callback: value => value.toLocaleString()
+                                      },
+                                      grid: { color: "rgba(255,255,255,0.2)" }
+                                  },
+                                  x: {
+                                      ticks: { color: "#ffffff" },
+                                      grid: { display: false }
+                                  }
+                              },
+                              plugins: {
+                                  tooltip: {
+                                      callbacks: {
+                                          label: function (tooltipItem) {
+                                              const video = videoData[tooltipItem.dataIndex];
+                                              return [
+                                                  `Views: ${video.views.toLocaleString()}`,
+                                                  `Likes: ${video.likes.toLocaleString()}`,
+                                                  `Comments: ${video.comments.toLocaleString()}`
+                                              ];
+                                          }
+                                      }
+                                  }
+                              }
+                          }
+                      });
+          
+                      console.log("Top videos chart created successfully!");
+          
+                  } catch (error) {
+                      console.error("Error fetching top videos:", error);
+                  }
+              }
+          
+              // ✅ Function to fetch and display uploads per month
+              async function fetchUploadsPerMonth(channelId) {
+                  try {
+                      console.log(`Fetching uploads per month for channel: ${channelId}`);
+                      const response = await fetch(`http://127.0.0.1:5000/get_uploads_per_month?channel_id=${channelId}`);
+                      if (!response.ok) {
+                          throw new Error(`HTTP error! Status: ${response.status}`);
+                      }
+          
+                      const uploadData = await response.json();
+                      console.log("Received Upload Data:", uploadData);
+          
+                      if (!Array.isArray(uploadData) || uploadData.length === 0) {
+                          console.error("Invalid or empty uploads per month response:", uploadData);
+                          return;
+                      }
+          
+                      // Extract data for chart
+                      const months = uploadData.map(data => data.month);
+                      const uploads = uploadData.map(data => data.uploads);
+          
+                      // Get canvas context
+                      const canvas = document.getElementById("uploadsPerMonthChart");
+                      if (!canvas) {
+                          console.error("Canvas element with ID 'uploadsPerMonthChart' is missing.");
+                          return;
+                      }
+                      const ctx = canvas.getContext("2d");
+          
+                      // Destroy previous chart instance if it exists
+                      if (window.uploadsPerMonthChart instanceof Chart) {
+                          window.uploadsPerMonthChart.destroy();
+                      }
+          
+                      // Create chart
+                      window.uploadsPerMonthChart = new Chart(ctx, {
+                          type: "line",
+                          data: {
+                              labels: months,
+                              datasets: [{
+                                  label: "Uploads",
+                                  data: uploads,
+                                  borderColor: "#4caf50",
+                                  backgroundColor: "rgba(76, 175, 80, 0.2)",
+                                  borderWidth: 2,
+                                  fill: true,
+                                  pointBackgroundColor: "#4caf50",
+                                  pointBorderColor: "#fff",
+                                  pointRadius: 5,
+                              }]
+                          },
+                          options: {
+                              responsive: true,
+                              maintainAspectRatio: false,
+                              scales: {
+                                  y: {
+                                      beginAtZero: true,
+                                      ticks: {
+                                          color: "#ffffff",
+                                          callback: value => value.toLocaleString()
+                                      },
+                                      grid: { color: "rgba(255,255,255,0.2)" }
+                                  },
+                                  x: {
+                                      ticks: { color: "#ffffff" },
+                                      grid: { display: false }
+                                  }
+                              },
+                              plugins: {
+                                  tooltip: {
+                                      callbacks: {
+                                          label: tooltipItem => `Uploads: ${tooltipItem.raw.toLocaleString()}`
+                                      }
+                                  }
+                              }
+                          }
+                      });
+          
+                      console.log("Uploads per month chart created successfully!");
+          
+                  } catch (error) {
+                      console.error("Error fetching uploads per month:", error);
+                  }
+              }
+          </script>
+          
+          </div>
+          <!-- Graph 2 -->
+          <div class="flex flex-col items-center w-full">
+            <div class="border-[#b89d9d] bg-[#382929] border-t-2 w-full min-h-[100px] h-auto">
+              <canvas id="durationChart"></canvas>
+            </div>
+            <p class="text-[#b89d9d] text-[13px] font-bold leading-normal tracking-[0.015em] mt-2">Total Video Duration
+              Per month</p>
+              <script>
+                async function fetchVideoDurations() {
+                  if (!channelId) {
+                    console.error("Channel ID is missing in the URL.");
+                    return;
+                  }
+              
+                  try {
+                    const response = await fetch(`http://127.0.0.1:5000/api/video_durations?channel_id=${channelId}&timeframe=month`);
+                    const data = await response.json();
+              
+                    if (data.error) {
+                      console.error("Error fetching data:", data.error);
+                      return;
+                    }
+              
+                    renderDurationChart(data.durations);
+                  } catch (error) {
+                    console.error("Error fetching video durations:", error);
+                  }
+                }
+              
+                function renderDurationChart(durationData) {
+                  const ctx = document.getElementById("durationChart").getContext("2d");
+              
+                  // Destroy existing chart instance if present (to avoid overlapping charts)
+                  if (window.durationChartInstance) {
+                    window.durationChartInstance.destroy();
+                  }
+              
+                  window.durationChartInstance = new Chart(ctx, {
+                    type: "bar",
+                    data: {
+                      labels: Object.keys(durationData),
+                      datasets: [{
+                        label: "Total Duration (Minutes)",
+                        data: Object.values(durationData),
+                        backgroundColor: "rgba(54, 162, 235, 0.6)",
+                        borderColor: "rgba(54, 162, 235, 1)",
+                        borderWidth: 1
+                      }]
+                    },
+                    options: {
+                      responsive: true,
+                      scales: {
+                        y: { beginAtZero: true }
+                      }
+                    }
+                  });
+                }
+              
+                // Load the chart when the page loads
+                if (channelId) {
+                  fetchVideoDurations();
+                }
+              </script>
+              
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+    <h2 class="text-white text-[22px] font-bold leading-tight tracking-[-0.015em] px-4 pb-3 pt-5">
+  Top Videos by Views
+</h2>
+
+<div class="flex flex-wrap gap-4 px-4 py-6">
+  <div class="flex min-w-72 w-full flex-1 flex-col gap-2 rounded-xl border border-[#533c3c] p-6">
+    <p class="text-white text-base font-medium leading-normal">Top Videos by Views</p>
+
+    <!-- Chart Container -->
+    <div class="w-full h-auto">
+      <canvas id="topVideosChart"></canvas>
+    </div>
+  </div>
+</div>
+
+<div class="sentiment-analysis">
+  <h2>YouTube Comment Sentiment Analysis</h2>
+  <form id="sentimentForm">
+      <input type="text" id="videoUrl" placeholder="Enter YouTube Video URL" required />
+      <button type="submit">Analyze</button>
+  </form>
+  <div id="result" class="hidden">
+      <h3>Sentiment Analysis Result:</h3>
+      <div class="result-item">
+          <span>Positive Comments:</span>
+          <div class="progress-bar">
+              <div id="positiveBar" class="progress-fill"></div>
+          </div>
+          <span id="positivePercentage">0%</span>
+      </div>
+      <div class="result-item">
+          <span>Negative Comments:</span>
+          <div class="progress-bar">
+              <div id="negativeBar" class="progress-fill"></div>
+          </div>
+          <span id="negativePercentage">0%</span>
+      </div>
+      <div class="result-item">
+          <span>Neutral Comments:</span>
+          <div class="progress-bar">
+              <div id="neutralBar" class="progress-fill"></div>
+          </div>
+          <span id="neutralPercentage">0%</span>
+      </div>
+      <div class="conclusion" id="conclusion">
+          Conclusion: N/A
+      </div>
+  </div>
+</div>
+<style>
+  body {
+      background-color: #121212; /* Set to dark background */
+      color: #ffffff; /* Set text color to white */
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+  }
+
+  h1, h2, h3, p, label, input, button {
+      color: #ffffff; /* Ensure all text is visible */
+  }
+
+  input, button {
+      background-color: #1e1e1e;
+      border: 1px solid #ffffff;
+      color: #ffffff;
+      padding: 10px;
+      margin: 5px;
+      border-radius: 5px;
+  }
+
+  input::placeholder {
+      color: #aaaaaa;
+  }
+
+  button:hover {
+      background-color: #333333;
+      cursor: pointer;
+  }
+
+  .search-icon {
+    margin-right: 0; /* Remove any gap */
+}
+
+  .sentiment-analysis {
+      background-color: #121212;
+      color: #ffffff;
+      padding: 24px;
+      border-radius: 16px;
+      margin-top: 20px;
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.6);
+      font-family: 'Arial', sans-serif;
+  }
+
+  .sentiment-analysis h2 {
+      font-size: 26px;
+      margin-bottom: 20px;
+      color: #e0e0e0;
+      font-weight: 600;
+      text-align: center;
+  }
+
+  #sentimentForm {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 24px;
+  }
+
+  #videoUrl {
+      flex: 1;
+      padding: 12px;
+      border: 1px solid #333;
+      border-radius: 8px;
+      background-color: #1e1e1e;
+      color: #ffffff;
+      outline: none;
+      font-size: 16px;
+  }
+
+  #sentimentForm button {
+      background-color: #ff0000;
+      color: #ffffff;
+      padding: 12px 24px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: bold;
+      transition: background-color 0.3s ease;
+  }
+
+  #sentimentForm button:hover {
+      background-color: #cc0000;
+  }
+
+  .result-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px;
+      border-radius: 8px;
+      background-color: #1e1e1e;
+      margin-bottom: 12px;
+      border: 1px solid #333;
+  }
+
+  .progress-bar {
+      flex: 1;
+      height: 12px;
+      background-color: #333;
+      border-radius: 12px;
+      overflow: hidden;
+      position: relative;
+  }
+
+  .progress-fill {
+      height: 100%;
+      width: 0;
+      border-radius: 12px;
+      transition: width 0.5s ease;
+  }
+
+  #positiveBar {
+      background: linear-gradient(to right, #00ff00, #66ff66);
+  }
+
+  #negativeBar {
+      background: linear-gradient(to right, #ff4d4d, #ff0000);
+  }
+
+  #neutralBar {
+      background: linear-gradient(to right, #ffc107, #ffecb3);
+  }
+
+  .conclusion {
+      padding: 12px;
+      background-color: #1e1e1e;
+      border-radius: 8px;
+      border: 1px solid #333;
+      color: #e0e0e0;
+      margin-top: 12px;
+      font-size: 16px;
+      font-weight: 500;
+      text-align: center;
+  }
+
+  .hidden {
+      display: none;
+  }
+</style>
+
+<script>
+  document.getElementById('sentimentForm').addEventListener('submit', async (event) => {
+      event.preventDefault();
+
+      const videoUrl = document.getElementById('videoUrl').value;
+      const videoId = extractVideoId(videoUrl);
+
+      if (!videoId) {
+          alert("Invalid YouTube URL. Please enter a valid video link.");
+          return;
+      }
+
+      // Show loading state
+      document.getElementById('result').classList.add('hidden');
+      document.getElementById('positivePercentage').innerText = 'Loading...';
+      document.getElementById('negativePercentage').innerText = 'Loading...';
+      document.getElementById('neutralPercentage').innerText = 'Loading...';
+      document.getElementById('conclusion').innerText = 'Analyzing...';
+
+      try {
+          const response = await fetch('http://127.0.0.1:5000/analyze', {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({ videoId })
+          });
+
+          if (!response.ok) throw new Error('Failed to fetch data');
+
+          const data = await response.json();
+
+          // Update percentages
+          document.getElementById('positivePercentage').innerText = `${data.positive}%`;
+          document.getElementById('negativePercentage').innerText = `${data.negative}%`;
+          document.getElementById('neutralPercentage').innerText = `${data.neutral}%`;
+          document.getElementById('conclusion').innerText = `Conclusion: ${data.conclusion}`;
+
+          // Animate progress bars
+          document.getElementById('positiveBar').style.width = `${data.positive}%`;
+          document.getElementById('negativeBar').style.width = `${data.negative}%`;
+          document.getElementById('neutralBar').style.width = `${data.neutral}%`;
+
+          document.getElementById('result').classList.remove('hidden');
+          
+      } catch (error) {
+          console.error('Error:', error);
+          alert('Failed to analyze sentiment. Please try again.');
+      }
+  });
+
+  function extractVideoId(url) {
+      const regExp = /^.*(youtu.be\/|v\/|\/u\/\w\/|embed\/|shorts\/|watch\?v=|&v=)([^#&?]*).*/;
+      const match = url.match(regExp);
+      return (match && match[2].length === 11) ? match[2] : null;
+  }
+</script>
+
+</body>
+<script>
+  document.addEventListener("DOMContentLoaded", async function () {
+    const channelId = new URLSearchParams(window.location.search).get("channel_id");
+
+    if (!channelId) {
+      console.error("Channel ID is missing in the URL.");
+      return;
+    }
+
+    try {
+      // Fetch Channel Data (Name, Profile, Stats, About)
+      const channelResponse = await fetch("http://127.0.0.1:5000/fetch_channel_data", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ channel_id: channelId }),
+      });
+
+      const channelData = await channelResponse.json();
+
+      if (channelData.valid) {
+        document.getElementById("channel-name").textContent = channelData.channel_name;
+        document.getElementById("channel-profile").style.backgroundImage = `url('${channelData.profile_image}')`;
+        document.getElementById("channel-subscribers").textContent = channelData.subscribers;
+        document.getElementById("channel-total-videos").textContent = channelData.total_videos;
+        document.getElementById("channel-total-views").textContent = channelData.total_views;
+        document.getElementById("channel-about").textContent = channelData.about;
+      } else {
+        document.getElementById("channel-name").textContent = "Invalid Channel ID";
+      }
+
+      // Fetch Subscriber Growth Data
+      const growthResponse = await fetch(`http://127.0.0.1:5000/get_subscriber_growth?channel_id=${channelId}`);
+      const growthData = await growthResponse.json();
+
+      if (growthData.error) {
+        console.error("Error fetching subscriber growth:", growthData.error);
+        return;
+      }
+
+      renderSubscriberChart(growthData.dates, growthData.subscribers);
+    } catch (error) {
+      console.error("Error in fetching data:", error);
+    }
+  });
+
+  function renderSubscriberChart(dates, subscribers) {
+    const ctx = document.getElementById("subscriberChart").getContext("2d");
+
+    // Create a gradient for the shading effect
+    const gradient = ctx.createLinearGradient(0, 0, 0, 400);
+    gradient.addColorStop(0, "rgba(100, 75, 75, 0.3)");  // Darker at the top
+    gradient.addColorStop(1, "rgba(100, 75, 75, 0)");    // Fully transparent at the bottom
+
+
+    new Chart(ctx, {
+      type: "line",
+      data: {
+        labels: dates,
+        datasets: [{
+          label: "Subscribers Over Time",
+          data: subscribers,
+          borderColor: "#b89d9d",
+          backgroundColor: gradient, // Apply the gradient here
+          borderWidth: 2,
+          pointRadius: 3,
+          pointBackgroundColor: "#b89d9d",
+          tension: 0.3,
+          fill: true // Enable fill below the line
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          x: { ticks: { color: "#b89d9d" } },
+          y: { ticks: { color: "#b89d9d" } }
+        },
+        plugins: {
+          legend: { display: false }
+        }
+      }
+    });
+  }
+
+</script>
+
+
+
+</html>

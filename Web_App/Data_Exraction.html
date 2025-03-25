@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>YouTube Data Engineering Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background: linear-gradient(135deg, #0d0d0d, #1a1a1a);
+            color: #ffffff;
+        }
+        .card {
+            background-color: #1e1e1e;
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.5);
+        }
+        .sidebar {
+            background-color: #121212;
+            height: 100vh;
+            position: fixed;
+            padding: 20px;
+            width: 200px;
+        }
+        .sidebar a {
+            display: block;
+            padding: 12px;
+            color: #aaa;
+            transition: background 0.3s;
+            border-radius: 6px;
+        }
+        .sidebar a:hover {
+            background-color: #333;
+            color: #fff;
+        }
+    </style>
+</head>
+<body class="flex">
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <h2 class="text-lg font-bold mb-4">Dashboard</h2>
+        <a href="#overview">Overview</a>
+        <a href="#trends">Trends</a>
+        <a href="#analytics">Analytics</a>
+        <a href="#videos">Videos</a>
+        <a href="#engagement">Engagement</a>
+    </div>
+
+    <!-- Main Content -->
+    <div class="flex-1 ml-52 p-8">
+        <!-- Header -->
+        <div class="mb-8">
+            <h1 class="text-3xl font-bold">YouTube Data Engineering</h1>
+            <p class="text-gray-400">Data Aggregation: Yearly / Monthly</p>
+        </div>
+
+        <!-- Stats Overview -->
+        <div class="grid grid-cols-5 gap-6 mb-8">
+            <div class="card p-4 rounded-xl">
+                <h2 class="text-xl font-semibold">Total Videos</h2>
+                <p class="text-2xl">500</p>
+            </div>
+            <div class="card p-4 rounded-xl">
+                <h2 class="text-xl font-semibold">Total Views</h2>
+                <p class="text-2xl">5M</p>
+            </div>
+            <div class="card p-4 rounded-xl">
+                <h2 class="text-xl font-semibold">Total Likes</h2>
+                <p class="text-2xl">2M</p>
+            </div>
+            <div class="card p-4 rounded-xl">
+                <h2 class="text-xl font-semibold">Total Subscribers</h2>
+                <p class="text-2xl">10K</p>
+            </div>
+            <div class="card p-4 rounded-xl">
+                <h2 class="text-xl font-semibold">Total Duration</h2>
+                <p class="text-2xl">1000h</p>
+            </div>
+        </div>
+
+        <!-- Trends and Charts Placeholder -->
+        <div class="grid grid-cols-3 gap-6 mb-8">
+            <div class="card p-6 rounded-xl">
+                <h3 class="text-lg font-semibold">Subscriber Growth Over Time</h3>
+                <div class="h-32 bg-gray-800 rounded mt-4"></div>
+            </div>
+            <div class="card p-6 rounded-xl">
+                <h3 class="text-lg font-semibold">Views Trend Over Time</h3>
+                <div class="h-32 bg-gray-800 rounded mt-4"></div>
+            </div>
+            <div class="card p-6 rounded-xl">
+                <h3 class="text-lg font-semibold">Top 5 Videos by Views</h3>
+                <div class="h-32 bg-gray-800 rounded mt-4"></div>
+            </div>
+        </div>
+
+        <!-- Table Placeholder -->
+        <div class="card p-6 rounded-xl">
+            <h3 class="text-lg font-semibold mb-4">Top Videos</h3>
+            <table class="w-full text-left">
+                <thead>
+                    <tr class="border-b border-gray-700">
+                        <th class="p-2">Title</th>
+                        <th class="p-2">Views</th>
+                        <th class="p-2">Likes</th>
+                        <th class="p-2">Comments</th>
+                        <th class="p-2">Date</th>
+                        <th class="p-2">Duration</th>
+                        <th class="p-2">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="p-2">Video 1</td>
+                        <td class="p-2">1000</td>
+                        <td class="p-2">100</td>
+                        <td class="p-2">10</td>
+                        <td class="p-2">2022-01-01</td>
+                        <td class="p-2">10m</td>
+                        <td class="p-2 text-blue-400 cursor-pointer">View</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+    </div>
+
+    
+</body>
+</html>
