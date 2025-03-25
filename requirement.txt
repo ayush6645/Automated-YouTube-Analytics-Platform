@@ -1,0 +1,9 @@
+Flask
+google-api-python-client
+pandas
+numpy
+kafka-python
+hdfs
+requests
+json
+datetime
